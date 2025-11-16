@@ -31,8 +31,11 @@ def parse_args():
     p.add_argument("--index", "-i", type=int, default=None, help="Camera index to open")
     p.add_argument("--list-cameras", action="store_true", help="List cameras and exit")
     p.add_argument("--resolution", "-r", type=str, default=None, help="WxH, e.g. 1280x720")
-    p.add_argument("--backend", type=str, default="auto", choices=["auto", "default", "dshow", "msmf"],
-                   help="Camera backend (Windows): auto tries dshow->msmf->default")
+    p.add_argument("--backend", type=str, default="auto", choices=["auto", "default", "dshow", "msmf", "avfoundation"],
+                   help=(
+                       "Camera backend: Windows uses 'dshow'/'msmf'; macOS uses 'avfoundation'. "
+                       "'auto' tries best backend for the platform"
+                   ))
     return p.parse_args()
 
 
