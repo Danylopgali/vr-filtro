@@ -36,17 +36,41 @@ class FaceMeshDetector:
         return bool(self._available)
 
     def detect(self, frame) -> List[List[Tuple[int, int]]]:
-        """Return a list of faces; each face is a list of (x,y) landmark coordinates."""
+        """Detecta rostros y retorna sus landmarks (puntos faciales).
+        
+        MediaPipe Face Mesh detecta 468 puntos en cada rostro:
+        - Landmark 1: punta de la nariz
+        - Landmarks 33, 133, 362, 263: esquinas de ojos
+        - Landmarks 61, 291: comisuras de labios
+        - Y muchos más...
+        
+        Returns:
+            Lista de rostros. Cada rostro es una lista de 468 tuplas (x, y) en píxeles.
+            Ejemplo: [[(x1, y1), (x2, y2), ..., (x468, y468)]]
+        """
         if self._mesh is None or cv2 is None:
             return []
-        h, w = frame.shape[:2]
+            
+        # ========== PREPARAR IMAGEN PARA MEDIAPIPE ==========
+        h, w = frame.shape[:2]  # Alto y ancho del frame
+        
+        # MediaPipe requiere RGB, OpenCV usa BGR
         rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        
+        # ========== PROCESAR FRAME ==========
+        # MediaPipe detecta rostros y calcula 468 landmarks por rostro
         result = self._mesh.process(rgb)
+        
+        # ========== CONVERTIR LANDMARKS A PÍXELES ==========
         faces: List[List[Tuple[int, int]]] = []
-        if result.multi_face_landmarks:
-            for lm in result.multi_face_landmarks:
+        
+        if result.multi_face_landmarks:  # Si se detectó al menos un rostro
+            for lm in result.multi_face_landmarks:  # Para cada rostro detectado
+                # MediaPipe retorna coordenadas normalizadas (0.0 - 1.0)
+                # Las convertimos a píxeles multiplicando por ancho/alto
                 pts = [(int(p.x * w), int(p.y * h)) for p in lm.landmark]
                 faces.append(pts)
+                
         return faces
 
     def draw(self, frame, faces: List[List[Tuple[int, int]]]) -> None:

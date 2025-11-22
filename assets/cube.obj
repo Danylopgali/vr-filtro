@@ -1,0 +1,24 @@
+# Cubo simple para filtro 3D
+# Vertices (8 esquinas del cubo)
+v -0.5 -0.5 -0.5
+v  0.5 -0.5 -0.5
+v  0.5  0.5 -0.5
+v -0.5  0.5 -0.5
+v -0.5 -0.5  0.5
+v  0.5 -0.5  0.5
+v  0.5  0.5  0.5
+v -0.5  0.5  0.5
+
+# Caras (usando índices de vértices)
+# Cara frontal
+f 1 2 3 4
+# Cara trasera
+f 5 6 7 8
+# Cara izquierda
+f 1 5 8 4
+# Cara derecha
+f 2 6 7 3
+# Cara superior
+f 4 3 7 8
+# Cara inferior
+f 1 2 6 5

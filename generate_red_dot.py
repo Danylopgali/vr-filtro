@@ -12,7 +12,7 @@ draw = ImageDraw.Draw(img)
 
 # Dibujar círculo rojo en el centro
 center = size // 2
-radius = 80
+radius = 200
 draw.ellipse(
     [center - radius, center - radius, center + radius, center + radius],
     fill=(255, 0, 0, 255),
